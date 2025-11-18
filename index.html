@@ -5,41 +5,41 @@
   <title>妙麗歲數計算機</title>
 
   <style>
+    /* 全域設定 */
     * {
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    /* 背景以手機為主：柔和漸層 + 上下留一點空間 */
     body {
       margin: 0;
-      padding: 16px;
+      padding: 16px 12px;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      background: linear-gradient(135deg, #fff0f5, #f5f8ff);
+      background: radial-gradient(circle at top, #ffe9f5 0, #fef5ff 40%, #f6f7ff 100%);
     }
 
-    /* 主容器（手機寬度為主） */
+    /* 主卡片：手機版左右留一點邊，看起來像 App 卡片 */
     .app-container {
-      margin-top: 24px;
+      margin: 0 auto;
       width: 100%;
-      max-width: 380px;
+      max-width: 420px;                 /* 適合手機寬度 320–420 */
       background: #ffffff;
-      border-radius: 20px;
-      padding: 18px 18px 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 18px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.9);
     }
 
-    /* 狗狗圖片區 */
+    /* 狗狗頭像：稍微大一點 */
     .dog-photo {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       overflow: hidden;
-      margin: 0 auto 12px;
+      margin: 4px auto 10px;
       border: 4px solid #fff;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
 
     .dog-photo img {
@@ -49,10 +49,10 @@
     }
 
     .app-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 4px;
       color: #333;
     }
 
@@ -63,72 +63,77 @@
       margin-bottom: 16px;
     }
 
-    /* label + 日期輸入 */
+    .input-group {
+      margin-bottom: 10px;
+    }
+
     label {
-      font-size: 13px;
-      margin-bottom: 6px;
       display: block;
+      font-size: 13px;
       color: #444;
+      margin-bottom: 6px;
     }
 
     input[type="date"] {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid #d0d0d5;
-      background: #fafafa;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
       font-size: 14px;
+      background: #fafafa;
       outline: none;
-      transition: all .15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
     input[type="date"]:focus {
-      border-color: #a16dff;
-      box-shadow: 0 0 0 3px rgba(161,109,255,0.2);
-      background: #fff;
+      border-color: #a96dff;
+      box-shadow: 0 0 0 2px rgba(169, 109, 255, 0.25);
+      background: #ffffff;
     }
 
-    /* 按鈕 */
+    /* 按鈕：寬度 100%，更像手機 App */
     .btn {
       width: 100%;
-      margin-top: 14px;
+      margin-top: 12px;
       padding: 10px 16px;
       border-radius: 999px;
-      background: linear-gradient(135deg, #7b6dff, #a96dff);
-      color: #fff;
       border: none;
-      font-weight: 700;
       font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(140,109,255,0.3);
-      transition: transform .1s ease;
+      color: #fff;
+      background: linear-gradient(135deg, #7f6dff, #c46dff);
+      box-shadow: 0 4px 12px rgba(120, 88, 255, 0.35);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .btn:hover {
       transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(120, 88, 255, 0.4);
     }
 
     .btn:active {
-      transform: scale(0.97);
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(120, 88, 255, 0.25);
     }
 
-    /* 結果顯示區 */
+    /* 結果卡片：稍微壓扁一點，不那麼厚重 */
     .result-box {
-      margin-top: 18px;
-      padding: 14px;
-      background: linear-gradient(135deg, #ffe2e2, #ffd6bd);
-      border-radius: 14px;
-      border: 1px solid rgba(0,0,0,0.05);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-      font-size: 14px;
-      color: #333;
-      line-height: 1.6;
-      min-height: 50px;
+      margin-top: 16px;
+      padding: 10px 11px;
+      background: linear-gradient(135deg, #ffe0dd, #ffd8c2);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      font-size: 13px;
+      color: #423232;
+      line-height: 1.5;
+      min-height: 40px;
     }
 
     .result-highlight {
-      color: #d24f4f;
       font-weight: 700;
+      color: #c64646;
     }
 
     .error {
@@ -137,42 +142,53 @@
     }
 
     .hint {
-      font-size: 10px;
+      margin-top: 8px;
+      font-size: 11px;
       text-align: center;
       color: #999;
-      margin-top: 10px;
+    }
+
+    /* 更小螢幕時微調：縮小 padding，讓畫面更緊湊 */
+    @media (max-width: 360px) {
+      body {
+        padding: 10px 8px;
+      }
+      .app-container {
+        padding: 16px 14px 18px;
+      }
+      .app-title {
+        font-size: 17px;
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="app-container">
-
-    <!-- 🔥 狗狗圖片（Unsplash） -->
+    <!-- 這裡的 src 可以換成你正在用的那張狗狗圖 -->
     <div class="dog-photo">
-      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60" 
-           alt="cute shiba dog">
+      <img
+        src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b6?auto=format&fit=crop&w=600&q=80"
+        alt="可愛狗狗">
     </div>
 
     <div class="app-title">🐶 妙麗歲數計算機</div>
-    <div class="subtitle">輸入妙麗的出生日期，幫你換算成人類年齡！</div>
+    <div class="subtitle">輸入妙麗的出生日期，幫你換算成「人類年齡」！</div>
 
-    <!-- 日期輸入 -->
-    <label for="birthDate">妙麗的出生日期：</label>
-    <input type="date" id="birthDate" value="2023-02-28" />
+    <div class="input-group">
+      <label for="birthDate">妙麗的出生日期：</label>
+      <input type="date" id="birthDate" value="2023-02-28" />
+    </div>
 
-    <!-- 計算按鈕 -->
-    <button id="calculateBtn" class="btn">📏 開始計算</button>
+    <button id="calculateBtn" class="btn">開始計算</button>
 
-    <!-- 結果顯示 -->
     <div id="result" class="result-box">
-      請輸入出生日期後按下「開始計算」😊
+      請先選擇妙麗的生日，再按「開始計算」看看她現在幾歲吧！
     </div>
 
     <div class="hint">
-      公式：人類年齡 = 16 × ln(狗的實際年數) + 31
+      公式：人類年齡 = 16 × ln(狗狗實際年數) + 31
     </div>
-
   </div>
 
   <script>
@@ -181,41 +197,50 @@
 
     const birthInput = document.getElementById("birthDate");
     const resultBox = document.getElementById("result");
-    const btn = document.getElementById("calculateBtn");
+    const calculateBtn = document.getElementById("calculateBtn");
 
-    /** 顯示結果 */
-    function showResult(dogAge, humanAge) {
+    /** 顯示結果文字 */
+    function renderResult(dogAgeDisplay, humanAgeDisplay) {
       resultBox.innerHTML =
-        `${dogName}現在大約 <span class="result-highlight">${dogAge}</span> 歲狗狗年齡，` +
-        `換算成人類年齡大約是 <span class="result-highlight">${humanAge}</span> 歲。`;
+        `${dogName}現在大約 <span class="result-highlight">${dogAgeDisplay}</span> 歲狗狗年齡，` +
+        `換算成人類年齡大約是 <span class="result-highlight">${humanAgeDisplay}</span> 歲。`;
     }
 
-    /** 保存到 localStorage */
-    function saveResult(birthDate, dogAge, humanAge) {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ birthDate, dogAge, humanAge })
-      );
+    /** 存到 localStorage */
+    function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
+      const payload = {
+        birthDate: birthDateStr,
+        dogAge: dogAgeDisplay,
+        humanAge: humanAgeDisplay,
+        savedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     }
 
-    /** 載入上次結果 */
-    function loadLastResult() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      if (!data) return;
+    /** 從 localStorage 載入上一次的結果 */
+    function loadFromStorage() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
 
-      const obj = JSON.parse(data);
-
-      if (obj.birthDate) birthInput.value = obj.birthDate;
-      if (obj.dogAge && obj.humanAge) showResult(obj.dogAge, obj.humanAge);
+      try {
+        const data = JSON.parse(raw);
+        if (data.birthDate) {
+          birthInput.value = data.birthDate;
+        }
+        if (data.dogAge && data.humanAge) {
+          renderResult(data.dogAge, data.humanAge);
+        }
+      } catch (e) {
+        console.warn("解析 localStorage 失敗：", e);
+      }
     }
 
-    /** 計算按鈕事件 */
-    btn.addEventListener("click", () => {
+    /** 點擊計算按鈕 */
+    calculateBtn.addEventListener("click", () => {
       const birthValue = birthInput.value;
 
       if (!birthValue) {
-        resultBox.innerHTML =
-          '<span class="error">請先選擇妙麗的出生日期喔！</span>';
+        resultBox.innerHTML = '<span class="error">請先選擇妙麗的出生日期喔！</span>';
         return;
       }
 
@@ -223,30 +248,32 @@
       const today = new Date();
 
       if (birthDate > today) {
-        resultBox.innerHTML =
-          '<span class="error">出生日期不能是未來的日期！</span>';
+        resultBox.innerHTML = '<span class="error">出生日期不能是未來的日期～</span>';
         return;
       }
 
+      // 狗狗實際年數（以年為單位）
       const diffMs = today - birthDate;
       const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
 
       if (years <= 0) {
         resultBox.innerHTML =
-          `${dogName}還是剛出生的小寶寶喔！`;
+          `${dogName}現在還是剛出生的小寶寶，年齡太小暫時無法換算成人類年齡喔！`;
         return;
       }
 
-      const dogAge = years.toFixed(1);
-      const humanAge = (16 * Math.log(years) + 31).toFixed(1);
+      const dogAgeYears = years;
+      const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
 
-      showResult(dogAge, humanAge);
-      saveResult(birthValue, dogAge, humanAge);
+      const dogAgeDisplay = dogAgeYears.toFixed(1);
+      const humanAgeDisplay = humanAgeYears.toFixed(1);
+
+      renderResult(dogAgeDisplay, humanAgeDisplay);
+      saveToStorage(birthValue, dogAgeDisplay, humanAgeDisplay);
     });
 
-    /** 頁面載入後 → 載入上次計算結果 */
-    document.addEventListener("DOMContentLoaded", loadLastResult);
+    // 載入頁面時，把上一次的結果帶出來
+    document.addEventListener("DOMContentLoaded", loadFromStorage);
   </script>
-
 </body>
 </html>
