@@ -14,14 +14,14 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* 讓整個視窗是一個完整畫面，且頁面本身不出現 X/Y 捲軸 */
+    /* 讓整個視窗是一個完整畫面，且「手機上」頁面本身不出現 X/Y 捲軸 */
     html,
     body {
       width: 100%;
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* 頁面層級不出現捲軸 */
+      overflow: hidden; /* 預設給手機：頁面層級不出現捲軸 */
     }
 
     /* 手機優先背景 + 置中卡片 */
@@ -45,7 +45,7 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.9);
 
-      overflow-y: auto;          /* 只在卡片內部允許垂直捲動 */
+      overflow-y: auto;          /* 手機：只在卡片內部允許垂直捲動 */
       overflow-x: hidden;        /* 不會出現水平捲軸 */
     }
 
@@ -239,7 +239,27 @@
       }
     }
 
-    /* 中型螢幕以上：稍微加大一些，看起來更像小工具頁面 */
+    /* 中型螢幕以上：稍微加大一些，看起來更像小工具頁面
+       並且改成「整個頁面」可以垂直捲動、卡片內部不再出現右邊捲軸 */
+    @media (min-width: 768px) {
+      html,
+      body {
+        height: auto;
+        min-height: 100%;
+        overflow-y: auto;   /* 電腦版：改由整個頁面捲動 */
+      }
+
+      body {
+        align-items: flex-start; /* 從上方開始排，避免被夾在中間 */
+        padding: 24px 16px;
+      }
+
+      .app-container {
+        max-height: none;       /* 取消高度限制 */
+        overflow-y: visible;    /* 不再顯示卡片內部的右側捲軸 */
+      }
+    }
+
     @media (min-width: 480px) {
       .app-container {
         margin-top: 0;
@@ -260,7 +280,7 @@
 
 <body>
   <div class="app-container">
-    <!-- 頂部：狗狗照片（可以改成自己的圖） -->
+    <!-- 頂部：狗狗照片 -->
     <div class="dog-photo">
       <img
         src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60"
@@ -274,7 +294,6 @@
     <!-- 日期輸入 -->
     <div class="input-group">
       <label for="birthDate">妙麗的出生日期：</label>
-      <!-- 預設日期可自行修改 -->
       <input type="date" id="birthDate" value="2023-02-28">
       <div class="hint-text">
         選好日期後按下「開始計算」。下次打開會自動記住上次的日期和結果。
@@ -314,13 +333,9 @@
   const lastTimeSpan = document.getElementById("lastTime");
   const calculateBtn = document.getElementById("calculateBtn");
 
-  /**
-   * 把時間字串（ISO 或 Date 物件）格式化成人類好讀的台灣時間
-   */
   function formatDateTime(raw) {
     const d = raw instanceof Date ? raw : new Date(raw);
-    if (isNaN(d.getTime())) return ""; // 解析失敗就不顯示
-
+    if (isNaN(d.getTime())) return "";
     return d.toLocaleString("zh-TW", {
       year: "numeric",
       month: "2-digit",
@@ -330,9 +345,6 @@
     });
   }
 
-  /**
-   * 把結果排版成兩個卡片 + 一段敘述文字
-   */
   function renderResult(dogAgeDisplay, humanAgeDisplay, savedAtText) {
     resultContainer.innerHTML = `
       <div class="result-cards">
@@ -359,24 +371,15 @@
     lastTimeSpan.textContent = savedAtText ? `上次計算：${savedAtText}` : "";
   }
 
-  /**
-   * 顯示錯誤訊息
-   */
   function renderError(message) {
     resultContainer.innerHTML = `<div class="result-placeholder error">${message}</div>`;
     lastTimeSpan.textContent = "";
   }
 
-  /**
-   * 將結果存入 localStorage：
-   *  - savedAt 存 ISO 字串（穩定格式）
-   *  - 顯示時再用 formatDateTime 轉成台灣時間
-   */
   function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
     const now = new Date();
-    const iso = now.toISOString();          // 儲存用
-    const savedAtNice = formatDateTime(now); // 顯示用
-
+    const iso = now.toISOString();
+    const savedAtNice = formatDateTime(now);
     const payload = {
       birthDate: birthDateStr,
       dogAge: dogAgeDisplay,
@@ -387,20 +390,14 @@
     return savedAtNice;
   }
 
-  /**
-   * 從 localStorage 載入上一次的結果（如果有）
-   */
   function loadFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
-
     try {
       const data = JSON.parse(raw);
-
       if (data.birthDate) {
         birthInput.value = data.birthDate;
       }
-
       if (data.dogAge && data.humanAge) {
         const niceTime = data.savedAt ? formatDateTime(data.savedAt) : "";
         renderResult(data.dogAge, data.humanAge, niceTime);
@@ -410,13 +407,6 @@
     }
   }
 
-  /**
-   * 點擊「開始計算」：
-   * 1. 驗證日期
-   * 2. 計算狗狗實際年數
-   * 3. 套公式算人類年齡
-   * 4. 顯示結果 + 存 localStorage
-   */
   calculateBtn.addEventListener("click", () => {
     const birthValue = birthInput.value;
 
@@ -442,7 +432,7 @@
     }
 
     const dogAgeYears = years;
-    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31; // ln
+    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
 
     const dogAgeDisplay = dogAgeYears.toFixed(1);
     const humanAgeDisplay = humanAgeYears.toFixed(1);
@@ -451,7 +441,6 @@
     renderResult(dogAgeDisplay, humanAgeDisplay, savedAt);
   });
 
-  // 載入頁面時，把上一次結果帶出來
   document.addEventListener("DOMContentLoaded", loadFromStorage);
 </script>
 
