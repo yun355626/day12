@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>妙麗歲數計算機</title>
 
+  <!-- 手機版關鍵：讓畫面以裝置寬度為主 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
   <style>
     /* 全域設定：字型與盒模型 */
     * {
@@ -11,40 +14,48 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* 手機優先：背景 + 置中卡片 */
+    /* 讓整個視窗是一個完整畫面，且頁面本身不出現 X/Y 捲軸 */
+    html,
     body {
+      width: 100%;
+      height: 100%;
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
+      overflow: hidden; /* 頁面層級不出現捲軸 */
+    }
+
+    /* 手機優先背景 + 置中卡片 */
+    body {
+      padding: 8px 10px 16px;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding:
-        calc(8px + env(safe-area-inset-top, 0px))
-        calc(12px + env(safe-area-inset-right, 0px))
-        calc(16px + env(safe-area-inset-bottom, 0px))
-        calc(12px + env(safe-area-inset-left, 0px));
+      align-items: center;
       background: radial-gradient(circle at top, #ffe9f5 0, #fef5ff 40%, #f6f7ff 100%);
     }
 
-    /* 主卡片容器：手機幾乎滿版，桌機置中 */
+    /* 主卡片：在手機上幾乎滿版，必要時「卡片內部」才垂直捲動 */
     .app-container {
       width: 100%;
-      max-width: 440px;
-      margin: 12px auto 24px;
+      max-width: 480px;
+      max-height: 100%;          /* 不超過螢幕高度 */
+      margin: 0 auto;
       background: #ffffff;
-      border-radius: 18px;
-      padding: 20px 18px 22px;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      padding: 22px 20px 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.9);
+
+      overflow-y: auto;          /* 只在卡片內部允許垂直捲動 */
+      overflow-x: hidden;        /* 不會出現水平捲軸 */
     }
 
     /* 狗狗圓形頭像 */
     .dog-photo {
-      width: 104px;
-      height: 104px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       overflow: hidden;
-      margin: 0 auto 10px;
+      margin: 0 auto 12px;
       border: 4px solid #fff;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
@@ -57,7 +68,7 @@
 
     /* 標題與說明文字（置中） */
     .app-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 700;
       text-align: center;
       color: #333;
@@ -65,31 +76,30 @@
     }
 
     .subtitle {
-      font-size: 13px;
+      font-size: 12px;
       text-align: center;
       color: #777;
       margin-bottom: 18px;
-      line-height: 1.5;
     }
 
     /* 輸入區塊 */
     .input-group {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     label {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
       color: #444;
       margin-bottom: 4px;
     }
 
     input[type="date"] {
       width: 100%;
-      padding: 11px 12px;
+      padding: 9px 10px;
       border-radius: 10px;
       border: 1px solid #ddd;
-      font-size: 15px;
+      font-size: 14px;
       background: #fafafa;
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -102,20 +112,19 @@
     }
 
     .hint-text {
-      margin-top: 6px;
-      font-size: 12px;
+      margin-top: 4px;
+      font-size: 11px;
       color: #999;
-      line-height: 1.5;
     }
 
     /* 計算按鈕：寬度 100%，像手機 App 按鈕 */
     .btn {
       width: 100%;
-      margin-top: 14px;
-      padding: 13px 18px;
+      margin-top: 12px;
+      padding: 11px 16px;
       border-radius: 999px;
       border: none;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
@@ -136,8 +145,8 @@
 
     /* 結果外框 */
     .result-wrapper {
-      margin-top: 18px;
-      padding: 12px 12px 10px;
+      margin-top: 16px;
+      padding: 10px 10px 8px;
       border-radius: 14px;
       background: #fff7f3;
       border: 1px solid #ffe0d1;
@@ -147,7 +156,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-size: 12px;
       color: #555;
     }
@@ -155,21 +164,18 @@
     .last-time {
       font-size: 11px;
       color: #999;
-      text-align: right;
-      flex-shrink: 0;
-      margin-left: 8px;
     }
 
     /* 兩個結果卡片：狗狗年齡 / 人類年齡 */
     .result-cards {
       display: flex;
       gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .result-card {
       flex: 1;
-      padding: 10px 10px 8px;
+      padding: 8px 8px 6px;
       border-radius: 10px;
       background: #ffe4da;
       text-align: center;
@@ -186,7 +192,7 @@
     }
 
     .result-value {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 700;
       color: #c64646;
     }
@@ -198,15 +204,15 @@
     }
 
     .result-text {
-      font-size: 13px;
+      font-size: 12px;
       color: #503434;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .result-placeholder {
-      font-size: 13px;
+      font-size: 12px;
       color: #777;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .error {
@@ -216,61 +222,37 @@
 
     /* 公式文字 */
     .formula {
-      margin-top: 10px;
-      font-size: 12px;
+      margin-top: 8px;
+      font-size: 11px;
       color: #999;
       text-align: center;
-      line-height: 1.5;
     }
 
-    /* 手機寬度（<= 480px）：結果卡片改直向、整體更像 App */
-    @media (max-width: 480px) {
-      body {
-        align-items: stretch;
-      }
-
+    /* 較小螢幕再微調：讓元素稍微緊湊、結果卡片改為直向 */
+    @media (max-width: 360px) {
       .app-container {
-        margin-top: 4px;
-        margin-bottom: 20px;
-        border-radius: 18px;
-        padding: 18px 16px 20px;
+        padding: 18px 14px 20px;
+        border-radius: 16px;
       }
-
       .result-cards {
         flex-direction: column;
       }
     }
 
-    /* 超小螢幕再微調：讓元素更緊湊 */
-    @media (max-width: 360px) {
-      .app-container {
-        padding: 16px 12px 18px;
-        border-radius: 16px;
-      }
-      .subtitle {
-        font-size: 12px;
-      }
-      .result-value {
-        font-size: 20px;
-      }
-    }
-
     /* 中型螢幕以上：稍微加大一些，看起來更像小工具頁面 */
-    @media (min-width: 768px) {
-      body {
-        padding: 24px 16px 32px;
-        align-items: center;
-      }
+    @media (min-width: 480px) {
       .app-container {
-        max-width: 480px;
         margin-top: 0;
       }
       .app-title {
         font-size: 22px;
       }
+      .result-value {
+        font-size: 22px;
+      }
       .dog-photo {
-        width: 120px;
-        height: 120px;
+        width: 130px;
+        height: 130px;
       }
     }
   </style>
@@ -278,7 +260,7 @@
 
 <body>
   <div class="app-container">
-    <!-- 頂部：狗狗照片 -->
+    <!-- 頂部：狗狗照片（可以改成自己的圖） -->
     <div class="dog-photo">
       <img
         src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60"
@@ -292,6 +274,7 @@
     <!-- 日期輸入 -->
     <div class="input-group">
       <label for="birthDate">妙麗的出生日期：</label>
+      <!-- 預設日期可自行修改 -->
       <input type="date" id="birthDate" value="2023-02-28">
       <div class="hint-text">
         選好日期後按下「開始計算」。下次打開會自動記住上次的日期和結果。
@@ -331,9 +314,13 @@
   const lastTimeSpan = document.getElementById("lastTime");
   const calculateBtn = document.getElementById("calculateBtn");
 
+  /**
+   * 把時間字串（ISO 或 Date 物件）格式化成人類好讀的台灣時間
+   */
   function formatDateTime(raw) {
     const d = raw instanceof Date ? raw : new Date(raw);
-    if (isNaN(d.getTime())) return "";
+    if (isNaN(d.getTime())) return ""; // 解析失敗就不顯示
+
     return d.toLocaleString("zh-TW", {
       year: "numeric",
       month: "2-digit",
@@ -343,6 +330,9 @@
     });
   }
 
+  /**
+   * 把結果排版成兩個卡片 + 一段敘述文字
+   */
   function renderResult(dogAgeDisplay, humanAgeDisplay, savedAtText) {
     resultContainer.innerHTML = `
       <div class="result-cards">
@@ -369,15 +359,23 @@
     lastTimeSpan.textContent = savedAtText ? `上次計算：${savedAtText}` : "";
   }
 
+  /**
+   * 顯示錯誤訊息
+   */
   function renderError(message) {
     resultContainer.innerHTML = `<div class="result-placeholder error">${message}</div>`;
     lastTimeSpan.textContent = "";
   }
 
+  /**
+   * 將結果存入 localStorage：
+   *  - savedAt 存 ISO 字串（穩定格式）
+   *  - 顯示時再用 formatDateTime 轉成台灣時間
+   */
   function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
     const now = new Date();
-    const iso = now.toISOString();
-    const savedAtNice = formatDateTime(now);
+    const iso = now.toISOString();          // 儲存用
+    const savedAtNice = formatDateTime(now); // 顯示用
 
     const payload = {
       birthDate: birthDateStr,
@@ -389,15 +387,20 @@
     return savedAtNice;
   }
 
+  /**
+   * 從 localStorage 載入上一次的結果（如果有）
+   */
   function loadFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
 
     try {
       const data = JSON.parse(raw);
+
       if (data.birthDate) {
         birthInput.value = data.birthDate;
       }
+
       if (data.dogAge && data.humanAge) {
         const niceTime = data.savedAt ? formatDateTime(data.savedAt) : "";
         renderResult(data.dogAge, data.humanAge, niceTime);
@@ -407,6 +410,13 @@
     }
   }
 
+  /**
+   * 點擊「開始計算」：
+   * 1. 驗證日期
+   * 2. 計算狗狗實際年數
+   * 3. 套公式算人類年齡
+   * 4. 顯示結果 + 存 localStorage
+   */
   calculateBtn.addEventListener("click", () => {
     const birthValue = birthInput.value;
 
@@ -432,7 +442,7 @@
     }
 
     const dogAgeYears = years;
-    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
+    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31; // ln
 
     const dogAgeDisplay = dogAgeYears.toFixed(1);
     const humanAgeDisplay = humanAgeYears.toFixed(1);
@@ -441,6 +451,7 @@
     renderResult(dogAgeDisplay, humanAgeDisplay, savedAt);
   });
 
+  // 載入頁面時，把上一次結果帶出來
   document.addEventListener("DOMContentLoaded", loadFromStorage);
 </script>
 
