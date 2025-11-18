@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>妙麗歲數計算機</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      background: linear-gradient(135deg, #fff0f5, #f5f8ff);
+    }
+
+    /* 主容器（手機寬度為主） */
+    .app-container {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 380px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 18px 18px 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    /* 狗狗圖片區 */
+    .dog-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 12px;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .dog-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      text-align: center;
+      color: #777;
+      margin-bottom: 16px;
+    }
+
+    /* label + 日期輸入 */
+    label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      display: block;
+      color: #444;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #d0d0d5;
+      background: #fafafa;
+      font-size: 14px;
+      outline: none;
+      transition: all .15s ease;
+    }
+
+    input[type="date"]:focus {
+      border-color: #a16dff;
+      box-shadow: 0 0 0 3px rgba(161,109,255,0.2);
+      background: #fff;
+    }
+
+    /* 按鈕 */
+    .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7b6dff, #a96dff);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(140,109,255,0.3);
+      transition: transform .1s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* 結果顯示區 */
+    .result-box {
+      margin-top: 18px;
+      padding: 14px;
+      background: linear-gradient(135deg, #ffe2e2, #ffd6bd);
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      font-size: 14px;
+      color: #333;
+      line-height: 1.6;
+      min-height: 50px;
+    }
+
+    .result-highlight {
+      color: #d24f4f;
+      font-weight: 700;
+    }
+
+    .error {
+      color: #d64545;
+      font-weight: 700;
+    }
+
+    .hint {
+      font-size: 10px;
+      text-align: center;
+      color: #999;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+
+    <!-- 🔥 狗狗圖片（Unsplash） -->
+    <div class="dog-photo">
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60" 
+           alt="cute shiba dog">
+    </div>
+
+    <div class="app-title">🐶 妙麗歲數計算機</div>
+    <div class="subtitle">輸入妙麗的出生日期，幫你換算成人類年齡！</div>
+
+    <!-- 日期輸入 -->
+    <label for="birthDate">妙麗的出生日期：</label>
+    <input type="date" id="birthDate" value="2023-02-28" />
+
+    <!-- 計算按鈕 -->
+    <button id="calculateBtn" class="btn">📏 開始計算</button>
+
+    <!-- 結果顯示 -->
+    <div id="result" class="result-box">
+      請輸入出生日期後按下「開始計算」😊
+    </div>
+
+    <div class="hint">
+      公式：人類年齡 = 16 × ln(狗的實際年數) + 31
+    </div>
+
+  </div>
+
+  <script>
+    const dogName = "妙麗";
+    const STORAGE_KEY = "miaoLiDogAgeResult";
+
+    const birthInput = document.getElementById("birthDate");
+    const resultBox = document.getElementById("result");
+    const btn = document.getElementById("calculateBtn");
+
+    /** 顯示結果 */
+    function showResult(dogAge, humanAge) {
+      resultBox.innerHTML =
+        `${dogName}現在大約 <span class="result-highlight">${dogAge}</span> 歲狗狗年齡，` +
+        `換算成人類年齡大約是 <span class="result-highlight">${humanAge}</span> 歲。`;
+    }
+
+    /** 保存到 localStorage */
+    function saveResult(birthDate, dogAge, humanAge) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ birthDate, dogAge, humanAge })
+      );
+    }
+
+    /** 載入上次結果 */
+    function loadLastResult() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) return;
+
+      const obj = JSON.parse(data);
+
+      if (obj.birthDate) birthInput.value = obj.birthDate;
+      if (obj.dogAge && obj.humanAge) showResult(obj.dogAge, obj.humanAge);
+    }
+
+    /** 計算按鈕事件 */
+    btn.addEventListener("click", () => {
+      const birthValue = birthInput.value;
+
+      if (!birthValue) {
+        resultBox.innerHTML =
+          '<span class="error">請先選擇妙麗的出生日期喔！</span>';
+        return;
+      }
+
+      const birthDate = new Date(birthValue);
+      const today = new Date();
+
+      if (birthDate > today) {
+        resultBox.innerHTML =
+          '<span class="error">出生日期不能是未來的日期！</span>';
+        return;
+      }
+
+      const diffMs = today - birthDate;
+      const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+
+      if (years <= 0) {
+        resultBox.innerHTML =
+          `${dogName}還是剛出生的小寶寶喔！`;
+        return;
+      }
+
+      const dogAge = years.toFixed(1);
+      const humanAge = (16 * Math.log(years) + 31).toFixed(1);
+
+      showResult(dogAge, humanAge);
+      saveResult(birthValue, dogAge, humanAge);
+    });
+
+    /** 頁面載入後 → 載入上次計算結果 */
+    document.addEventListener("DOMContentLoaded", loadLastResult);
+  </script>
+
+</body>
+</html>
