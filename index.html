@@ -5,33 +5,31 @@
   <title>妙麗歲數計算機</title>
 
   <style>
-    /* 全域設定 */
     * {
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* 背景以手機為主：柔和漸層 + 上下留一點空間 */
+    /* 背景：柔和漸層，手機優先 */
     body {
       margin: 0;
-      padding: 16px 12px;
+      padding: 16px 12px 24px;
       min-height: 100vh;
       background: radial-gradient(circle at top, #ffe9f5 0, #fef5ff 40%, #f6f7ff 100%);
     }
 
-    /* 主卡片：手機版左右留一點邊，看起來像 App 卡片 */
+    /* 主卡片：像一個 App 畫面，左右留白 */
     .app-container {
+      max-width: 420px;
       margin: 0 auto;
-      width: 100%;
-      max-width: 420px;                 /* 適合手機寬度 320–420 */
       background: #ffffff;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 18px 18px 20px;
       box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.9);
     }
 
-    /* 狗狗頭像：稍微大一點 */
+    /* 頂部：狗狗照片 + 標題 + 說明（全部置中） */
     .dog-photo {
       width: 110px;
       height: 110px;
@@ -49,11 +47,11 @@
     }
 
     .app-title {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 4px;
       color: #333;
+      margin-bottom: 4px;
     }
 
     .subtitle {
@@ -63,20 +61,21 @@
       margin-bottom: 16px;
     }
 
+    /* 輸入區 */
     .input-group {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     label {
       display: block;
       font-size: 13px;
       color: #444;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     input[type="date"] {
       width: 100%;
-      padding: 9px 12px;
+      padding: 9px 10px;
       border-radius: 10px;
       border: 1px solid #ddd;
       font-size: 14px;
@@ -91,11 +90,17 @@
       background: #ffffff;
     }
 
-    /* 按鈕：寬度 100%，更像手機 App */
+    .hint-text {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #999;
+    }
+
+    /* 按鈕 */
     .btn {
       width: 100%;
       margin-top: 12px;
-      padding: 10px 16px;
+      padding: 11px 16px;
       border-radius: 999px;
       border: none;
       font-size: 15px;
@@ -117,23 +122,76 @@
       box-shadow: 0 3px 8px rgba(120, 88, 255, 0.25);
     }
 
-    /* 結果卡片：稍微壓扁一點，不那麼厚重 */
-    .result-box {
+    /* 結果外框 */
+    .result-wrapper {
       margin-top: 16px;
-      padding: 10px 11px;
-      background: linear-gradient(135deg, #ffe0dd, #ffd8c2);
-      border-radius: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.03);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-      font-size: 13px;
-      color: #423232;
-      line-height: 1.5;
-      min-height: 40px;
+      padding: 10px 10px 8px;
+      border-radius: 14px;
+      background: #fff7f3;
+      border: 1px solid #ffe0d1;
     }
 
-    .result-highlight {
+    .result-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .last-time {
+      font-size: 11px;
+      color: #999;
+    }
+
+    /* 兩個結果卡片（狗狗年齡 / 人類年齡） */
+    .result-cards {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .result-card {
+      flex: 1;
+      padding: 8px 8px 6px;
+      border-radius: 10px;
+      background: #ffe4da;
+      text-align: center;
+    }
+
+    .result-card.secondary {
+      background: #ffd9e7;
+    }
+
+    .result-label {
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    .result-value {
+      font-size: 18px;
       font-weight: 700;
       color: #c64646;
+    }
+
+    .result-unit {
+      font-size: 11px;
+      color: #555;
+      margin-left: 2px;
+    }
+
+    .result-text {
+      font-size: 12px;
+      color: #503434;
+      line-height: 1.5;
+    }
+
+    .result-placeholder {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.5;
     }
 
     .error {
@@ -141,23 +199,23 @@
       font-weight: 700;
     }
 
-    .hint {
+    .formula {
       margin-top: 8px;
       font-size: 11px;
-      text-align: center;
       color: #999;
+      text-align: center;
     }
 
-    /* 更小螢幕時微調：縮小 padding，讓畫面更緊湊 */
     @media (max-width: 360px) {
       body {
-        padding: 10px 8px;
+        padding: 10px 8px 18px;
       }
       .app-container {
         padding: 16px 14px 18px;
+        border-radius: 16px;
       }
-      .app-title {
-        font-size: 17px;
+      .result-cards {
+        flex-direction: column;
       }
     }
   </style>
@@ -165,115 +223,173 @@
 
 <body>
   <div class="app-container">
-    <!-- 這裡的 src 可以換成你正在用的那張狗狗圖 -->
+    <!-- 頂部：狗狗照片 + 標題 + 說明 -->
     <div class="dog-photo">
+      <!-- 這裡可以換成你自己的妙麗照片或 Unsplash 圖片 -->
       <img
-        src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b6?auto=format&fit=crop&w=600&q=80"
-        alt="可愛狗狗">
+        src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60"
+        alt="妙麗的照片">
     </div>
 
     <div class="app-title">🐶 妙麗歲數計算機</div>
     <div class="subtitle">輸入妙麗的出生日期，幫你換算成「人類年齡」！</div>
 
+    <!-- 日期輸入 -->
     <div class="input-group">
       <label for="birthDate">妙麗的出生日期：</label>
-      <input type="date" id="birthDate" value="2023-02-28" />
+      <input type="date" id="birthDate" value="2023-02-28">
+      <div class="hint-text">
+        選好日期後按下「開始計算」。下次打開會自動記住上次的日期和結果。
+      </div>
     </div>
 
+    <!-- 按鈕 -->
     <button id="calculateBtn" class="btn">開始計算</button>
 
-    <div id="result" class="result-box">
-      請先選擇妙麗的生日，再按「開始計算」看看她現在幾歲吧！
+    <!-- 結果區 -->
+    <div id="result" class="result-wrapper">
+      <div class="result-title-row">
+        <span>目前結果</span>
+        <span id="lastTime" class="last-time"></span>
+      </div>
+
+      <div id="resultContent">
+        <div class="result-placeholder">
+          還沒有計算紀錄。<br>
+          請先選擇妙麗的出生日期，再按「開始計算」。
+        </div>
+      </div>
     </div>
 
-    <div class="hint">
-      公式：人類年齡 = 16 × ln(狗狗實際年數) + 31
+    <div class="formula">
+      公式：人類年齡 = 16 × ln(狗狗實際年數) + 31（ln 為自然對數）
     </div>
   </div>
 
-  <script>
-    const dogName = "妙麗";
-    const STORAGE_KEY = "miaoLiDogAgeResult";
+<script>
+  const dogName = "妙麗";
+  const STORAGE_KEY = "miaoLiDogAgeResult";
 
-    const birthInput = document.getElementById("birthDate");
-    const resultBox = document.getElementById("result");
-    const calculateBtn = document.getElementById("calculateBtn");
+  const birthInput = document.getElementById("birthDate");
+  const resultContainer = document.getElementById("resultContent");
+  const lastTimeSpan = document.getElementById("lastTime");
+  const calculateBtn = document.getElementById("calculateBtn");
 
-    /** 顯示結果文字 */
-    function renderResult(dogAgeDisplay, humanAgeDisplay) {
-      resultBox.innerHTML =
-        `${dogName}現在大約 <span class="result-highlight">${dogAgeDisplay}</span> 歲狗狗年齡，` +
-        `換算成人類年齡大約是 <span class="result-highlight">${humanAgeDisplay}</span> 歲。`;
-    }
+  function renderResult(dogAgeDisplay, humanAgeDisplay, savedAtText) {
+    resultContainer.innerHTML = `
+      <div class="result-cards">
+        <div class="result-card">
+          <div class="result-label">狗狗年齡</div>
+          <div>
+            <span class="result-value">${dogAgeDisplay}</span>
+            <span class="result-unit">歲</span>
+          </div>
+        </div>
+        <div class="result-card secondary">
+          <div class="result-label">換算成人類年齡</div>
+          <div>
+            <span class="result-value">${humanAgeDisplay}</span>
+            <span class="result-unit">歲</span>
+          </div>
+        </div>
+      </div>
+      <div class="result-text">
+        ${dogName}現在大約是 <b>${dogAgeDisplay}</b> 歲的狗狗年齡，<br>
+        如果換成人類，就是差不多 <b>${humanAgeDisplay}</b> 歲的人。
+      </div>
+    `;
+    lastTimeSpan.textContent = savedAtText ? `上次計算：${savedAtText}` : "";
+  }
 
-    /** 存到 localStorage */
-    function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
-      const payload = {
-        birthDate: birthDateStr,
-        dogAge: dogAgeDisplay,
-        humanAge: humanAgeDisplay,
-        savedAt: new Date().toISOString(),
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    }
+  function renderError(message) {
+    resultContainer.innerHTML = `<div class="result-placeholder error">${message}</div>`;
+    lastTimeSpan.textContent = "";
+  }
 
-    /** 從 localStorage 載入上一次的結果 */
-    function loadFromStorage() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
+  // ✅ 幫時間做一個統一的「漂亮格式」
+  function formatDateTime(raw) {
+    const d = new Date(raw);
+    if (isNaN(d.getTime())) return raw; // 如果解析失敗就原樣顯示（防呆）
 
-      try {
-        const data = JSON.parse(raw);
-        if (data.birthDate) {
-          birthInput.value = data.birthDate;
-        }
-        if (data.dogAge && data.humanAge) {
-          renderResult(data.dogAge, data.humanAge);
-        }
-      } catch (e) {
-        console.warn("解析 localStorage 失敗：", e);
-      }
-    }
-
-    /** 點擊計算按鈕 */
-    calculateBtn.addEventListener("click", () => {
-      const birthValue = birthInput.value;
-
-      if (!birthValue) {
-        resultBox.innerHTML = '<span class="error">請先選擇妙麗的出生日期喔！</span>';
-        return;
-      }
-
-      const birthDate = new Date(birthValue);
-      const today = new Date();
-
-      if (birthDate > today) {
-        resultBox.innerHTML = '<span class="error">出生日期不能是未來的日期～</span>';
-        return;
-      }
-
-      // 狗狗實際年數（以年為單位）
-      const diffMs = today - birthDate;
-      const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
-
-      if (years <= 0) {
-        resultBox.innerHTML =
-          `${dogName}現在還是剛出生的小寶寶，年齡太小暫時無法換算成人類年齡喔！`;
-        return;
-      }
-
-      const dogAgeYears = years;
-      const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
-
-      const dogAgeDisplay = dogAgeYears.toFixed(1);
-      const humanAgeDisplay = humanAgeYears.toFixed(1);
-
-      renderResult(dogAgeDisplay, humanAgeDisplay);
-      saveToStorage(birthValue, dogAgeDisplay, humanAgeDisplay);
+    return d.toLocaleString("zh-TW", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
     });
+  }
 
-    // 載入頁面時，把上一次的結果帶出來
-    document.addEventListener("DOMContentLoaded", loadFromStorage);
-  </script>
+  // ✅ 存的時候就存「已排版好的在地時間」
+  function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
+    const now = new Date();
+    const savedAt = formatDateTime(now); // 這裡會得到類似「2025/11/18 14:32」
+
+    const payload = {
+      birthDate: birthDateStr,
+      dogAge: dogAgeDisplay,
+      humanAge: humanAgeDisplay,
+      savedAt
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    return savedAt;
+  }
+
+  // ✅ 載入舊資料時，如果 savedAt 是舊版 ISO 也會被 formatDateTime 美化
+  function loadFromStorage() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    try {
+      const data = JSON.parse(raw);
+      if (data.birthDate) {
+        birthInput.value = data.birthDate;
+      }
+      if (data.dogAge && data.humanAge) {
+        const niceTime = data.savedAt ? formatDateTime(data.savedAt) : "";
+        renderResult(data.dogAge, data.humanAge, niceTime);
+      }
+    } catch (e) {
+      console.warn("解析 localStorage 失敗：", e);
+    }
+  }
+
+  calculateBtn.addEventListener("click", () => {
+    const birthValue = birthInput.value;
+
+    if (!birthValue) {
+      renderError("請先選擇妙麗的出生日期喔！");
+      return;
+    }
+
+    const birthDate = new Date(birthValue);
+    const today = new Date();
+
+    if (birthDate > today) {
+      renderError("出生日期不能是未來的日期～");
+      return;
+    }
+
+    const diffMs = today - birthDate;
+    const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+
+    if (years <= 0) {
+      renderError(`${dogName}現在還是剛出生的小寶寶，年齡太小暫時無法換算成人類年齡喔！`);
+      return;
+    }
+
+    const dogAgeYears = years;
+    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
+
+    const dogAgeDisplay = dogAgeYears.toFixed(1);
+    const humanAgeDisplay = humanAgeYears.toFixed(1);
+
+    const savedAt = saveToStorage(birthValue, dogAgeDisplay, humanAgeDisplay);
+    renderResult(dogAgeDisplay, humanAgeDisplay, savedAt);
+  });
+
+  document.addEventListener("DOMContentLoaded", loadFromStorage);
+</script>
+
 </body>
 </html>
