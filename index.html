@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8" />
   <title>妙麗歲數計算機</title>
 
   <!-- 手機版關鍵：讓畫面以裝置寬度為主 -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <!--  放入這三行開始 -->
+  <link rel="icon" type="image/png" href="https://hackmd.io/_uploads/r10xgVflZe.png">
+  <link rel="apple-touch-icon" href="https://hackmd.io/_uploads/r10xgVflZe.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://hackmd.io/_uploads/r10xgVflZe.png">
+  <!--  放入這三行結束 -->
 
   <style>
     /* 全域設定：字型與盒模型 */
@@ -21,7 +28,8 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* 預設給手機：頁面層級不出現捲軸 */
+      overflow: hidden;
+      /* 預設給手機：頁面層級不出現捲軸 */
     }
 
     /* 手機優先背景 + 置中卡片 */
@@ -37,7 +45,8 @@
     .app-container {
       width: 100%;
       max-width: 480px;
-      max-height: 100%;          /* 不超過螢幕高度 */
+      max-height: 100%;
+      /* 不超過螢幕高度 */
       margin: 0 auto;
       background: #ffffff;
       border-radius: 20px;
@@ -45,8 +54,10 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.9);
 
-      overflow-y: auto;          /* 手機：只在卡片內部允許垂直捲動 */
-      overflow-x: hidden;        /* 不會出現水平捲軸 */
+      overflow-y: auto;
+      /* 手機：只在卡片內部允許垂直捲動 */
+      overflow-x: hidden;
+      /* 不會出現水平捲軸 */
     }
 
     /* 狗狗圓形頭像 */
@@ -234,6 +245,7 @@
         padding: 18px 14px 20px;
         border-radius: 16px;
       }
+
       .result-cards {
         flex-direction: column;
       }
@@ -242,21 +254,26 @@
     /* 中型螢幕以上：稍微加大一些，看起來更像小工具頁面
        並且改成「整個頁面」可以垂直捲動、卡片內部不再出現右邊捲軸 */
     @media (min-width: 768px) {
+
       html,
       body {
         height: auto;
         min-height: 100%;
-        overflow-y: auto;   /* 電腦版：改由整個頁面捲動 */
+        overflow-y: auto;
+        /* 電腦版：改由整個頁面捲動 */
       }
 
       body {
-        align-items: flex-start; /* 從上方開始排，避免被夾在中間 */
+        align-items: flex-start;
+        /* 從上方開始排，避免被夾在中間 */
         padding: 24px 16px;
       }
 
       .app-container {
-        max-height: none;       /* 取消高度限制 */
-        overflow-y: visible;    /* 不再顯示卡片內部的右側捲軸 */
+        max-height: none;
+        /* 取消高度限制 */
+        overflow-y: visible;
+        /* 不再顯示卡片內部的右側捲軸 */
       }
     }
 
@@ -264,12 +281,15 @@
       .app-container {
         margin-top: 0;
       }
+
       .app-title {
         font-size: 22px;
       }
+
       .result-value {
         font-size: 22px;
       }
+
       .dog-photo {
         width: 130px;
         height: 130px;
@@ -282,9 +302,7 @@
   <div class="app-container">
     <!-- 頂部：狗狗照片 -->
     <div class="dog-photo">
-      <img
-        src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60"
-        alt="妙麗的照片">
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=60" alt="妙麗的照片">
     </div>
 
     <!-- 標題與說明 -->
@@ -324,29 +342,29 @@
     </div>
   </div>
 
-<script>
-  const dogName = "妙麗";
-  const STORAGE_KEY = "miaoLiDogAgeResult_v3";
+  <script>
+    const dogName = "妙麗";
+    const STORAGE_KEY = "miaoLiDogAgeResult_v3";
 
-  const birthInput = document.getElementById("birthDate");
-  const resultContainer = document.getElementById("resultContent");
-  const lastTimeSpan = document.getElementById("lastTime");
-  const calculateBtn = document.getElementById("calculateBtn");
+    const birthInput = document.getElementById("birthDate");
+    const resultContainer = document.getElementById("resultContent");
+    const lastTimeSpan = document.getElementById("lastTime");
+    const calculateBtn = document.getElementById("calculateBtn");
 
-  function formatDateTime(raw) {
-    const d = raw instanceof Date ? raw : new Date(raw);
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleString("zh-TW", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-  }
+    function formatDateTime(raw) {
+      const d = raw instanceof Date ? raw : new Date(raw);
+      if (isNaN(d.getTime())) return "";
+      return d.toLocaleString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-  function renderResult(dogAgeDisplay, humanAgeDisplay, savedAtText) {
-    resultContainer.innerHTML = `
+    function renderResult(dogAgeDisplay, humanAgeDisplay, savedAtText) {
+      resultContainer.innerHTML = `
       <div class="result-cards">
         <div class="result-card">
           <div class="result-label">狗狗年齡</div>
@@ -368,81 +386,82 @@
         如果換成人類，就是差不多 <b>${humanAgeDisplay}</b> 歲的人。
       </div>
     `;
-    lastTimeSpan.textContent = savedAtText ? `上次計算：${savedAtText}` : "";
-  }
+      lastTimeSpan.textContent = savedAtText ? `上次計算：${savedAtText}` : "";
+    }
 
-  function renderError(message) {
-    resultContainer.innerHTML = `<div class="result-placeholder error">${message}</div>`;
-    lastTimeSpan.textContent = "";
-  }
+    function renderError(message) {
+      resultContainer.innerHTML = `<div class="result-placeholder error">${message}</div>`;
+      lastTimeSpan.textContent = "";
+    }
 
-  function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
-    const now = new Date();
-    const iso = now.toISOString();
-    const savedAtNice = formatDateTime(now);
-    const payload = {
-      birthDate: birthDateStr,
-      dogAge: dogAgeDisplay,
-      humanAge: humanAgeDisplay,
-      savedAt: iso
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    return savedAtNice;
-  }
+    function saveToStorage(birthDateStr, dogAgeDisplay, humanAgeDisplay) {
+      const now = new Date();
+      const iso = now.toISOString();
+      const savedAtNice = formatDateTime(now);
+      const payload = {
+        birthDate: birthDateStr,
+        dogAge: dogAgeDisplay,
+        humanAge: humanAgeDisplay,
+        savedAt: iso
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      return savedAtNice;
+    }
 
-  function loadFromStorage() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    try {
-      const data = JSON.parse(raw);
-      if (data.birthDate) {
-        birthInput.value = data.birthDate;
+    function loadFromStorage() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.birthDate) {
+          birthInput.value = data.birthDate;
+        }
+        if (data.dogAge && data.humanAge) {
+          const niceTime = data.savedAt ? formatDateTime(data.savedAt) : "";
+          renderResult(data.dogAge, data.humanAge, niceTime);
+        }
+      } catch (e) {
+        console.warn("解析 localStorage 失敗：", e);
       }
-      if (data.dogAge && data.humanAge) {
-        const niceTime = data.savedAt ? formatDateTime(data.savedAt) : "";
-        renderResult(data.dogAge, data.humanAge, niceTime);
+    }
+
+    calculateBtn.addEventListener("click", () => {
+      const birthValue = birthInput.value;
+
+      if (!birthValue) {
+        renderError("請先選擇妙麗的出生日期喔！");
+        return;
       }
-    } catch (e) {
-      console.warn("解析 localStorage 失敗：", e);
-    }
-  }
 
-  calculateBtn.addEventListener("click", () => {
-    const birthValue = birthInput.value;
+      const birthDate = new Date(birthValue);
+      const today = new Date();
 
-    if (!birthValue) {
-      renderError("請先選擇妙麗的出生日期喔！");
-      return;
-    }
+      if (birthDate > today) {
+        renderError("出生日期不能是未來的日期～");
+        return;
+      }
 
-    const birthDate = new Date(birthValue);
-    const today = new Date();
+      const diffMs = today - birthDate;
+      const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
 
-    if (birthDate > today) {
-      renderError("出生日期不能是未來的日期～");
-      return;
-    }
+      if (years <= 0) {
+        renderError(`${dogName}現在還是剛出生的小寶寶，年齡太小暫時無法換算成人類年齡喔！`);
+        return;
+      }
 
-    const diffMs = today - birthDate;
-    const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+      const dogAgeYears = years;
+      const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
 
-    if (years <= 0) {
-      renderError(`${dogName}現在還是剛出生的小寶寶，年齡太小暫時無法換算成人類年齡喔！`);
-      return;
-    }
+      const dogAgeDisplay = dogAgeYears.toFixed(1);
+      const humanAgeDisplay = humanAgeYears.toFixed(1);
 
-    const dogAgeYears = years;
-    const humanAgeYears = 16 * Math.log(dogAgeYears) + 31;
+      const savedAt = saveToStorage(birthValue, dogAgeDisplay, humanAgeDisplay);
+      renderResult(dogAgeDisplay, humanAgeDisplay, savedAt);
+    });
 
-    const dogAgeDisplay = dogAgeYears.toFixed(1);
-    const humanAgeDisplay = humanAgeYears.toFixed(1);
-
-    const savedAt = saveToStorage(birthValue, dogAgeDisplay, humanAgeDisplay);
-    renderResult(dogAgeDisplay, humanAgeDisplay, savedAt);
-  });
-
-  document.addEventListener("DOMContentLoaded", loadFromStorage);
-</script>
+    document.addEventListener("DOMContentLoaded", loadFromStorage);
+  </script>
 
 </body>
+
 </html>
